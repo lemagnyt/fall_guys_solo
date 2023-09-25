@@ -1,0 +1,187 @@
+RELEASE NOTE DE FALL GUYS SOLO :
+
+1. Instructions de jeu :
+a) Contrôles :
+	- déplacement : touches directionnelles ou ZQSD
+	- caméra : souris
+	- sauter : espace
+	- plonger : espace (pendant le saut)
+	- attraper : g
+	- agripper ou pousser : p
+	- grimper : espace (en agrippant)
+	- lancer : t
+	- echap : pause
+
+b) Infos :
+	- Il y a 5 Maps :
+		- Obstacle 1 et Obstacle 2 qui sont des maps à obstacles avec différents objets ayant des scripts particuliers
+		- Drawing qui est une map de jeu de dessin où l'on doit dessiner en allant sur les blocs du sol et reproduire la figure du mur d'en face (on efface si on 			retourne sur un bloc colorier)
+		- Random Way qui est une map avec un chemin aléatoire récupérer avec un algorithme aléatoire
+		- Faucheuse qui est une map avec deux faucheuses qui tournent et accélèrent au fil du temps et qu'il faut éviter pour ne pas tomber
+		- Falling Ground qui est une map avec différentes couches de sols composés de blocs qui tombe lorsqu'on marche dessus
+	- Dans le menu de jeu, il y a : 
+			- un shop pour changer de couleur de skin ou de queue et même de retirer ou remettre sa queue
+			- un toggle SELECT MAP pour sélectionner un groupe de map ou non 
+			- un bouton PLAY pour lancer la game
+			- un bouton CREDITS pour regarder les crédits
+			- un bouton QUITTER pour quitter le jeu
+	- On peut mettre en jeu le pause lorsque le timer a commencé, mais bien sûr la game continue d'avancer en arrière-plan
+	- A noter que les secondes dans le jeu sont un peu plus longues que des vraies secondes (new WaitForSecond(0.01f))
+		
+c) Condition de Victoire :
+	- Finir tous les niveaux de la game. Le nombre de niveau correspond soit au nombre de map total si le mode SELECT MAP n'est pas sélectionné dans les menus, soit au 		nombre de map sélectionnés.
+	- Maps survie -> on gagne si on arrive à survivre jusqu'à la fin du timer (falling ground, faucheuse)
+	- Maps chrono -> on gagne si on finit la map avant la fin du chrono (Obstacle 1, Obstacle 2, Random Way)
+	- Map dessin -> on gagne si on finit tous les dessins afficher sur le mur en face avant la fin du timer
+
+d) Condition de défaite :
+	- Lorsqu'on ne gagne pas sur une map on est directement éliminé et envoyé au menu Lose.
+
+e) Capacités du joueur :
+	- Le joueur peut tomber lorsqu'il est frappé ou qu'il a plongé
+	- Se rélever une fois avoir tomber
+	- Sauter
+	- Plonger
+	- S'aggriper à des blocs puis grimper
+	- Lancer des objets dans des boîtes afin d'ouvrir une porte (final des maps obstacle 1 et 2)
+	- Pousser des blocs
+	- Se déplacer sur les sols qui tournent et qui bougent
+
+f) Liste des objets animés :
+	- Faucheuse qui accélère de deltaSpeed toutes les 1/3 de timer et qui commence à une certaine vitesse
+	- Drawing Blocs pour les blocs de dessins qui change de couleur lorsqu'on appuie dessus afin de dessiner
+	- Falling Ground pour les sols qui passe en jaune puis rouge, puis disparaissent lorsqu'on marche 1 fois dessus
+	- Pendule et pont levis qui vont d'un angle à un autre
+	- Marteaux, cylindres, cerceaux  qui tournent à l'infini
+	- Cerceaux qui vont aussi accélérer la vitesse du joueur durant un certains temps lorsqu'on entre dedans
+	- Grabing objects qui sont les objets qu'on peut attraper
+	- Box qui sont les boîtes qui lorsqu'un certain nombre d'objet est placé dedans, va ouvrir une porte
+	- Canon qui envoie des balles aléatoirement entre 2 intervalles
+	- Balle de canon qui disparaît lorsqu'elle tombe dans le vide
+	- les sols qui bougent et qui tournent avec toute la physique du joueur revu afin de le faire suivre
+	- les blocs qui bougent avec la méthode transitionCoroutine vu en cour et 1 intervalle de temps entre 2 mouvements
+	- les portes aléatoires avec une des portes qui sera en mode trigger afin qu'on puisse la passer
+	- les blocs que l'on peut pousser ou s'aggriper dessus afin de grimper
+	- les tapis roulants qui font aller dans un sens quand on est dessus
+	- checkpoint Zone qui lorsqu'on passe dessus enregistre la nouvelle zone et quand on respawn on apparaît dans l'un des differents checkpoints aléatoirement
+	- deadzone qui tue le personnage et les objets qui peuvent tomber dedans
+	- winzone qui lorsqu'elle est franchi, fait gagner le personnage sur ce level
+	ETC ...
+
+
+
+2) Remarques :
+
+	Limitation :
+		- Le joueur ne peut grimper que sur un type de bloc car le bloc est une rounded box donc sa taille ne permettait pas d'obtenir son scale et donc nous avons fait que lej oueur montre par rapport aux proportions de ce bloc
+
+	Voies d'amélioration :
+		- Faire un multijoueur, mais pour cela il faudrait revoir toute la structure du jeu afin que la physique et les events fonctionnent correctement
+		- Faire des IA, pour les maps qui ne demandent pas beaucoup de commandes, tel que falling ground ou random way
+		- Rajouter des cinématiques à la fin du jeu, lorsque la map a chargé
+		- Rajouter des danses que l'on peut prendre dans le shop et exécuter avec d
+		- Diversifier encore plus les maps
+	
+	Bugs :
+		- Collision avec un objet qui se déplace trop vite peut faire passer à travers
+		- Lorsqu'on spam trop une commande tel que le saut et le plongeon cela peut entrâiner des petits bugs physiques
+		- L'angular velocity est désactivé en mode Motion donc le joueur peu marcher sur les coins des objets et sols
+
+3) Qui a fait quoi sur le projet ? 
+
+	Thomas Le Magny :
+		 - Physique du joueur : il tombe, se relève, et se déplace avec les sols qui se déplacent ou qui tournent
+		 - Actions du joueur : sauter, grimper, pousser, agripper, plonger, jeter, ...
+		 - Animations du joueur en fin
+		 - Création des menus(credits,play,win,start,lose,scores), du shop (changement skin et queue), du mode select map et de l'affichage des scores en fin de game
+		 - Automatisation des maps (nottamment map dessin, faucheuse)
+		 - Script objets : sols qui tombent, bloc dessin, portes aléatoires, chemins aléatoires, throwing box
+		 - Script Zone : Win Zone, Check Points, Dead Zone
+		 - Tous les events du jeu (game,menu,player,map,level,drawing,timers etc...)
+
+	Yassine Guelaa :
+		 - Objets qui se déplacent
+		 - Objets qui tournent infiniment ou d'un angle à un autre
+		 - Canon et balles de canon
+		 - Tapis roulants
+		 - Trouver les modes de jeux qu'on voulait
+		 - Cerceaux qui accélèrent le joueur
+		 - Sols et barrières qui se balancent quand on les pousse ou qu'on monte dessus
+		 - Hight Score manager et affichage
+
+	Mehdi Berel :
+		 - Sons et musiques du jeu
+		 - Trouver les assets de skin et d'environnement fall guys
+		 - Caméra du joueur et déplacement en fonction de l'orientation de celle-ci
+		 - Déplacement et orientation du joueur
+
+	Maxime Bardat :
+		 - Création des 6 différentes maps de jeu (sélection des obstacles, décorations, etc...)
+		 - Post-processing
+		 - Skybox
+		 - Trouver les obstacles qu'on voulait coder
+
+4) Assets récupérés :
+
+	- Skin du joueur et animations :
+		- Nom : Fall Guys Character (Proximamente)
+		- url : https://sketchfab.com/3d-models/fall-guys-character-proximamente-63334022594b4def8689a46f59d35ec1
+		- prix : gratuit
+		- licence : CC Attribution
+		
+	- Environnement fall guys :
+		- Nom : Hypepoly Battle Royal Show
+		- url : https://assetstore.unity.com/packages/3d/props/hypepoly-battle-royale-show-197766
+		- prix : payant
+		- licence : single entity
+
+	- Skybox :
+		- Nom : Free Stylized Skybox
+		- url : https://assetstore.unity.com/packages/2d/textures-materials/sky/free-stylized-skybox-212257
+		- prix : gratuit
+		- licence : Extension asset
+
+	- Sons :
+		- Voix du personnage :
+			- Nom : Fall Guys - Voice Sound effects
+			- Url : https://www.youtube.com/watch?v=TcCB6B1CiIQ
+		- Musiques de jeu : 
+			- Nom : Fall Guys (soundTrack)
+			- Url : https://www.youtube.com/playlist?list=PLDisKgcnAC4SQoS2bm6qD_9mpUg60I-yx
+		- Compteur de début :
+		 	- Nom : WIPEOUT with FALL GUYS SOUND EFFECTS?
+			- url : https://youtu.be/6MSVP9Qj5Y0
+		- Son d'élimination :
+			- Nom : Fall Guys : Ultimate Knockout OST - Eliminated!
+			- Url : https://youtu.be/Wwpvj6X_LXU
+		- Son débloquer une porte :
+			- Nom : The Legend of Zelda: Ocarina of Time - Secret Sound
+			- Url : https://www.youtube.com/watch?v=9d3qCPcMgH4
+		- Son bouton : 
+			- Nom : UI Select Button (Fall Guys Sound) - Sound Effect for editing
+			- Url : https://www.youtube.com/watch?v=DoHS-PmnkW4
+		- Son marcher sur un sol tombant ou dessin :
+			- Nom : Minecraft Pressure Plate Sound Effect
+			- Url : https://www.youtube.com/watch?v=0AEauEoFiVc
+		- Son boost vitesse :
+			- Nom : Team Fortress 2 Speed Boost sound effects
+			- Url : https://www.youtube.com/watch?v=HCj2-NCGijQ
+		- licence : tous ces sons viennent de jeux officiels et sont donc à licence personnelle
+		- prix : Tous gratuits
+		
+
+	- Images : 
+		- Menu de démarrage :
+			- Nom : Fall Guys: Ultimate Knockout | Game UI Database
+			- Url : https://www.gameuidatabase.com/uploads/Fall-Guys08302020-083556-7193.jpg
+		- Fond de menu :
+			- Nom : Joue à la Saison 1 de Fall Guys : Gratuit pour tous
+			- Url : https://cdn2.unrealengine.com/pattern-background-2880x1620-ea437687328f.jpg?resize=1&w=1920
+		- Icone Fall Guys :
+			- Nom : Icon for Fall Guys by redirectto
+			- Url : https://cdn2.steamgriddb.com/file/sgdb-cdn/icon/08bc6a3cf0983489f86e2c1c24719a22/32/256x256.png
+		- prix : gratuit
+		- licence : images venant du jeu fall guys donc licence personnelle
+
+
+	
